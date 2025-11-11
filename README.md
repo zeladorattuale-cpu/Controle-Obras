@@ -1,0 +1,388 @@
+[obras.htm.txt](https://github.com/user-attachments/files/23481911/obras.htm.txt)
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Condom�nio Jean Cordeiro Forte - Controle de Obras</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+
+<!-- Biblioteca para gerar PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+    :root {
+        --areia: #f4e1c1;
+        --chocolate: #4e342e;
+        --areia-clara: #fff3e0;
+        --areia-escura: #e0c097;
+    }
+
+    body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: var(--areia);
+        margin: 0;
+        padding: 0;
+        color: #000;
+        transition: background 0.5s, color 0.5s;
+    }
+
+    header {
+        background: var(--chocolate);
+        color: white;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        transition: background 0.5s;
+    }
+
+    header img {
+        height: 70px;
+        width: auto;
+        border-radius: 8px;
+        box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    }
+
+    header .titulo {
+        flex: 1;
+        text-align: center;
+    }
+
+    header h1, header h2 {
+        margin: 0;
+    }
+
+    nav {
+        background-color: var(--areia-escura);
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        padding: 10px 0;
+        flex-wrap: wrap;
+    }
+
+    nav a {
+        color: var(--chocolate);
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s, transform 0.2s;
+    }
+
+    nav a:hover {
+        color: #000;
+        transform: scale(1.1);
+    }
+
+    main {
+        padding: 20px;
+        max-width: 900px;
+        margin: auto;
+        background: var(--areia-clara);
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        transition: background 0.5s, color 0.5s;
+        margin-bottom: 80px; /* espa�o para o rodap� fixo */
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: 1px solid var(--chocolate);
+        background-color: #fffdf9;
+        color: #333;
+    }
+
+    input[type="file"] {
+        border: none;
+        background: transparent;
+    }
+
+    button {
+        background: var(--chocolate);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 15px;
+        font-weight: bold;
+        transition: background 0.3s;
+    }
+
+    button:hover {
+        background: #3e2723;
+    }
+
+    .obra {
+        border: 2px solid var(--areia-escura);
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 20px;
+        background: var(--areia);
+        transition: background 0.5s, color 0.5s;
+    }
+
+    .atraso {
+        color: red;
+        font-weight: bold;
+    }
+
+    .fotos img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin: 5px;
+        border-radius: 5px;
+        border: 2px solid var(--chocolate);
+    }
+
+    .btnRemover {
+        background: #8b0000;
+        margin-top: 10px;
+    }
+
+    .btnTema {
+        background: #a67c52;
+        font-size: 14px;
+        margin-left: 15px;
+    }
+
+    .btnPDF {
+        background: #00695c;
+        font-size: 14px;
+        margin-top: 20px;
+    }
+
+    footer {
+        background: var(--chocolate);
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-size: 14px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        left: 0;
+        box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+    }
+
+    footer p {
+        margin: 5px;
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <img src="logo-condominio.png" alt="Logo do Condom�nio">
+    <div class="titulo">
+        <h1>Condom�nio Jean Cordeiro Forte</h1>
+        <h2>Controle de Obras</h2>
+    </div>
+    <button class="btnTema" onclick="alternarTema()">Alternar Tema</button>
+</header>
+
+<nav>
+    <a href="#inicio">In�cio</a>
+    <a href="#obras">Obras</a>
+    <a href="#relatorios">Relat�rios</a>
+    <a href="#contato">Contato</a>
+</nav>
+
+<main id="inicio">
+    <h3>Registrar Nova Obra</h3>
+
+    <form id="formObra">
+        <label>Data de In�cio:</label>
+        <input type="date" id="inicioObra" required>
+
+        <label>Previs�o de T�rmino:</label>
+        <input type="date" id="previsao" required>
+
+        <label>Escopo do Servi�o:</label>
+        <textarea id="escopo" required></textarea>
+
+        <label>Valor da M�o de Obra (R$):</label>
+        <input type="number" id="maoObra" step="0.01" required>
+
+        <label>Materiais (descri��o e valor unit�rio):</label>
+        <textarea id="materiais" placeholder="Exemplo: Tinta - 150,00&#10;Cimento - 50,00"></textarea>
+
+        <label>Fotos Antes da Obra:</label>
+        <input type="file" id="fotosAntes" accept="image/*" multiple>
+
+        <label>Fotos Depois da Obra:</label>
+        <input type="file" id="fotosDepois" accept="image/*" multiple>
+
+        <button type="submit">Salvar Obra</button>
+    </form>
+
+    <h3 id="obras">Obras Registradas</h3>
+    <div id="listaObras"></div>
+
+    <button class="btnPDF" onclick="gerarPDF()">?? Gerar Relat�rio em PDF</button>
+</main>
+
+<footer>
+    <p><b>Condom�nio Jean Cordeiro Forte</b></p>
+    <p>Rua das Palmeiras, 123 - Fortaleza/CE | CNPJ: 12.345.678/0001-90</p>
+    <p>Telefone: (85) 3333-0000 | E-mail: contato@jeancordeiroforte.com.br</p>
+</footer>
+
+<script>
+const form = document.getElementById('formObra');
+const lista = document.getElementById('listaObras');
+let obras = JSON.parse(localStorage.getItem('obras')) || [];
+let temaEscuro = JSON.parse(localStorage.getItem('temaEscuro')) || false;
+
+function salvarLocal() {
+    localStorage.setItem('obras', JSON.stringify(obras));
+}
+
+function renderObras() {
+    lista.innerHTML = '';
+    const hoje = new Date();
+
+    obras.forEach((obra, index) => {
+        const dataPrev = new Date(obra.previsao);
+        const atrasada = hoje > dataPrev;
+
+        const obraDiv = document.createElement('div');
+        obraDiv.className = 'obra';
+        obraDiv.innerHTML = `
+            <p><b>In�cio:</b> ${obra.inicio}</p>
+            <p><b>Previs�o de T�rmino:</b> ${obra.previsao} ${atrasada ? '<span class="atraso">(ATRASADA)</span>' : ''}</p>
+            <p><b>Escopo:</b> ${obra.escopo}</p>
+            <p><b>M�o de Obra:</b> R$ ${obra.maoObra.toFixed(2)}</p>
+            <p><b>Materiais:</b><br>${obra.materiais.replace(/\n/g, '<br>')}</p>
+            <p><b>Total Geral:</b> R$ ${obra.totalGeral.toFixed(2)}</p>
+            <div class="fotos"><b>Fotos Antes:</b><br>${obra.fotosAntes.map(f => `<img src="${f}">`).join('')}</div>
+            <div class="fotosDepois"><b>Fotos Depois:</b><br>${obra.fotosDepois.map(f => `<img src="${f}">`).join('')}</div>
+            <button class="btnRemover" onclick="removerObra(${index})">Remover</button>
+        `;
+        lista.appendChild(obraDiv);
+    });
+}
+
+async function lerArquivos(fileList) {
+    const resultado = [];
+    for (const file of fileList) {
+        resultado.push(await fileToBase64(file));
+    }
+    return resultado;
+}
+
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.onerror = e => reject(e);
+        reader.readAsDataURL(file);
+    });
+}
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const inicio = document.getElementById('inicioObra').value;
+    const previsao = document.getElementById('previsao').value;
+    const escopo = document.getElementById('escopo').value;
+    const maoObra = parseFloat(document.getElementById('maoObra').value || 0);
+    const materiaisTxt = document.getElementById('materiais').value;
+
+    let totalMateriais = 0;
+    const linhas = materiaisTxt.split('\n');
+    linhas.forEach(l => {
+        const valor = parseFloat(l.split('-').pop());
+        if (!isNaN(valor)) totalMateriais += valor;
+    });
+    const totalGeral = maoObra + totalMateriais;
+
+    const fotosAntes = await lerArquivos(document.getElementById('fotosAntes').files);
+    const fotosDepois = await lerArquivos(document.getElementById('fotosDepois').files);
+
+    const novaObra = { inicio, previsao, escopo, maoObra, materiais: materiaisTxt, totalGeral, fotosAntes, fotosDepois };
+    obras.push(novaObra);
+    salvarLocal();
+    renderObras();
+    form.reset();
+});
+
+function removerObra(index) {
+    if (confirm("Deseja remover esta obra?")) {
+        obras.splice(index, 1);
+        salvarLocal();
+        renderObras();
+    }
+}
+
+function alternarTema() {
+    temaEscuro = !temaEscuro;
+    aplicarTema();
+    localStorage.setItem('temaEscuro', temaEscuro);
+}
+
+function aplicarTema() {
+    const body = document.body;
+    const main = document.querySelector("main");
+    const header = document.querySelector("header");
+    const nav = document.querySelector("nav");
+    const footer = document.querySelector("footer");
+
+    if (temaEscuro) {
+        body.style.background = "#3e2723";
+        body.style.color = "#f4e1c1";
+        main.style.background = "#4e342e";
+        header.style.background = "#2e1b12";
+        nav.style.background = "#5d4037";
+        footer.style.background = "#2e1b12";
+    } else {
+        body.style.background = "#f4e1c1";
+        body.style.color = "#000";
+        main.style.background = "#fff3e0";
+        header.style.background = "#4e342e";
+        nav.style.background = "#e0c097";
+        footer.style.background = "#4e342e";
+    }
+}
+
+async function gerarPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    let y = 20;
+
+    doc.setFont("helvetica", "bold");
+    doc.text("Condom�nio Jean Cordeiro Forte - Relat�rio de Obras", 10, y);
+    y += 10;
+    doc.setFont("helvetica", "normal");
+
+    obras.forEach((obra, i) => {
+        if (y > 270) { doc.addPage(); y = 20; }
+        const atrasada = new Date() > new Date(obra.previsao) ? " (ATRASADA)" : "";
+        doc.text(`Obra ${i+1}:`, 10, y);
+        y += 6;
+        doc.text(`In�cio: ${obra.inicio}`, 15, y); y += 6;
+        doc.text(`Previs�o: ${obra.previsao}${atrasada}`, 15, y); y += 6;
+        doc.text(`Escopo: ${obra.escopo}`, 15, y); y += 6;
+        doc.text(`M�o de Obra: R$ ${obra.maoObra.toFixed(2)}`, 15, y); y += 6;
+        doc.text(`Materiais: ${obra.materiais.replace(/\n/g, " | ")}`, 15, y); y += 6;
+        doc.text(`Total Geral: R$ ${obra.totalGeral.toFixed(2)}`, 15, y); y += 10;
+    });
+
+    doc.save("relatorio_obras.pdf");
+}
+
+aplicarTema();
+renderObras();
+</script>
+</body>
+</html>
